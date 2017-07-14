@@ -1,0 +1,122 @@
+//先序遍历，中序遍历，后序遍历的递归与循环实现方法 共6种。
+//
+#include<iostream>
+#include<stack>
+using namespace std;
+
+struct TreeNode
+{
+  int val;
+  TreeNode* left;
+  TreeNode* right;
+}
+//1.先序遍历递归实现
+void PreOrderTraverse(TreeNode* pRoot)
+{
+  if(pRoot)
+  {
+    cout<<pRoot->val;
+    if(pRoot->left)
+      PreOrderTraverse(pRoot->left);
+    if(pRoot->right)
+      PreOrderTraverse(pRoot->right);
+  }
+}
+
+//2.中序遍历递归实现
+void OrderTraverse(TreeNode* pRoot)
+{
+  if(pRoot)
+  {
+    if(pRoot->left)
+      OrderTraverse(pRoot->left);
+    cout<<pRoot->val;
+    if(pRoot->right)
+      OrderTraverse(pRoot->right);
+  }
+}
+
+//3.后序遍历递归实现
+void PostOrderTraverse(TreeNode* pRoot)
+{
+  if(pRoot)
+  {
+    if(pRoot->left)
+      PostOrderTraverse(pRoot->left);
+    if(pRoot->right)
+      PostOrderTraverse(pRoot->right);
+    cout<<pRoot->val;
+  }
+}
+
+//4.先序遍历循环实现
+void PreOrderTraverse(TreeNode* pRoot)
+{
+  stack<TreeNode*>buffer;
+  TreeNode* pNode = pRoot;
+  TreeNode* popNode;
+  while(pNode != NULL || !buffer.empty())
+  {
+    cout<<pNode->val;
+    buffer.push(pRoot);
+    pNode = pNode->left;
+    while(pNode == NULL && !buffer.empty())
+    {
+      popNode = buffer.top();
+      pNode = popNode->right;
+      buffer.pop();
+    }
+ }
+ 
+ //5.中序遍历循环实现
+ void OrderTraverse(TreeNode* pRoot)
+ {
+  stack<TreeNode*>buffer;
+  TreeNode* pNode = pRoot;
+  TreeNode* popNode;
+  while(pNode != NULL || !buffer.empty())
+  {
+    buffer.push(pRoot);
+    pNode = pNode->left;
+    while(pNode == NULL && !buffer.empty())
+    {
+      popNode = buffer.top();
+      cout<<popNode->val;
+      pNode = popNode->right;
+      buffer.pop();
+    }
+ }
+ 
+//6.后序遍历循环实现
+void postOrderTraverse(TreeNode* pRoot)  
+{  
+    stack<TreeNode*>buffer;
+    TreeNode* pNode = pRoot;
+    TreeNode* popNode;
+    TreeNode* preNode = NULL;
+  
+    //先将树的根节点入栈  
+    buffer.push(pNode); 
+    //直到栈空时，结束循环  
+    while(!buffer.empty())  
+    {  
+        pNode = buffer.top();   //栈顶节点置为当前节点
+        if((pNode->left==NULL && pNode->right==NULL) || 
+            (preNode!=NULL && (pNode->left==preNode || pNode->right==preNode)))  
+        {  
+            //如果当前节点没有左右孩子，或者有左孩子或右孩子，但已经被访问输出，  
+            //则直接输出该节点，将其出栈，将其设为上一个访问的节点  
+            cout<<pNode->val; 
+            buffer.pop(); 
+            pPre = pNode;  
+        }  
+        else  
+        {  
+            //如果不满足上面两种情况,则将其右孩子左孩子依次入栈  
+            if(pNode->right != NULL)  
+                buffer.push(pNode->right);
+            if(pNode->left != NULL)  
+                buffer.push(pNode->left);
+        }  
+    }  
+} 
